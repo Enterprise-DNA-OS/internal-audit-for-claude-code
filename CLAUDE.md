@@ -1,43 +1,59 @@
-# Internal Audit for Claude Code: operating instructions
+# Internal Audit for Claude Code
 
-This file is the brain. Claude Code reads it at the start of every session. It says who this is for, how work gets done, and the one right way to do each recurring job.
+The demo firm is fictional Harbour Assurance. Read actual records before advising. Never present demo findings as client evidence.
 
-## Who this is for
+- Read the matching .claude/commands recipe. All runtimes use npm run audit -- <command>.
+- Stay on main. Commit authorised changes. Never alter repository visibility.
+- Every write requires --actor. This records attribution, not identity proof. Resolve ambiguity by listing candidates and using a full ID.
+- Never send, publish, delete records, contact anyone or spend money. Reports and letters remain private drafts.
+- Read docs/compliance.md before explaining flags. This is scoped record checking, not full IIA conformance or legal certification.
+- Never substitute an implementation claim for auditor verification. Never review your own workpaper. Retesting clears its prior review.
+- Closing an engagement records approval only after workpapers are reviewed and evidence requests received. Management actions continue after engagement close.
+- Import only documented findings CSV, map custom columns explicitly and dry-run first. Source Closed is not local approval. Do not infer missing attachments, dates, reviewers or action owners.
+- Keep exports, evidence and credentials private. No real data in git. Do not run concurrent embedded writers.
+- Back up before migrations. Never edit an applied migration. Use /customise and npm test on disposable data.
+- TEST_DATABASE_URL must name a fresh empty disposable database. Normal tests ignore DATABASE_URL and use temporary PGlite.
 
-- **Business:** [YOUR BUSINESS]
-- **Operator:** [YOUR NAME], [your role]
-- **What matters most:** [the one or two outcomes you care about]
+## Files
 
-Fill this in once. A worker with context knows. A worker without it guesses.
+scripts/audit.mjs is the domain CLI. supabase/migrations holds schema changes. scripts/lib/db.mjs selects PostgreSQL or PGlite. views.json, documents.json and brand.json define private output. AGENTS.md routes all runtimes to this guide.
 
-## How to work
+## Commands
 
-1. **Take a brief, not a script.** The operator describes the outcome. You run the right command and present the answer.
-2. **Read before you write.** Before drafting anything about a record, read its full history first.
-3. **Plain language.** Short sentences. No filler. Numbers in tables.
-4. **Silent success, loud problems.** No play-by-play. Say what broke and what you did about it.
-5. **Stop at the line.** Anything that sends, deletes, or faces a customer waits for a yes in this session.
+- /plan: Read engagement scope, risk and workload
+- /workpapers: Read testing and reviewer records
+- /requests: Read evidence requests
+- /findings: Read findings and recommended actions
+- /actions: Read all action records
+- /evidence-chase: Find outstanding evidence requests
+- /review-queue: Find workpapers awaiting independent review
+- /follow-up: Review overdue and unverified actions
+- /high-risk: Find high-risk findings still needing action
+- /unassigned-actions: Find findings without action plans
+- /owner-load: Compare unresolved action workload
+- /coverage: Compare evidence and review gaps by engagement
+- /stale: Find engagements untouched for 30 days
+- /history: Read the most recent 100 local operations
+- /attention: Read the weekly attention list
+- /compliance: Read scoped documentation and follow-up checks
+- /engagement: --engagement=...
+- /search: --text=...
+- /add: --type=engagement|workpaper|request|finding|action --name=... plus required fields (see help)
+- /stage: --engagement=... --status=planned|fieldwork|reporting
+- /scope: --engagement=... --objective=... --scope=...
+- /receive: --request=... --evidence=...
+- /test: --workpaper=... --result=pass|fail --evidence=... --conclusion=...
+- /review: --workpaper=... (actor is the independent reviewer)
+- /implement: --action=... --evidence=...
+- /verify: --action=... --evidence=... (actor is the independent verifier)
+- /delay: --action=... --reason=... (preserves original due date)
+- /close: --engagement=... --conclusion=... (records approval after checking workpapers)
+- /log: --engagement=... --note=...
+- /import: auditboard --file=... --engagement=... [--mapping=...] [--dry-run]
+- /export: --out=exports/backup.json
+- /weekly-review: Write a private draft from plan, attention, review-queue and compliance
+- /draft-report: --engagement=...
+- /help: All commands support --json
 
-## Routing table: one right way for each recurring job
-
-| When the operator asks for... | Use this |
-|---|---|
-| <!-- TODO(author): one row per slash command --> | `/...` |
-
-If an ask fits nothing here, run the CLI directly (`npm run <cli> -- --help`) and then propose a new command for it.
-
-## Hard rules
-
-- Never send email or messages from here. Draft to `drafts/`, a person sends.
-- Never delete records without an explicit yes in this session. Prefer marking closed or archived.
-- Never invent a record. If a name is ambiguous, list the candidates and ask.
-- The database is the source of truth. If the answer is not in it, say so.
-
-## Where things live
-
-- `scripts/` the CLI. `scripts/lib/db.mjs` picks `DATABASE_URL` (Postgres, Supabase) or the embedded database in `.data/`.
-- `supabase/migrations/` the schema, plain SQL. `npm run migrate` applies it.
-- `.claude/commands/` the slash commands. Add one every time the same ask comes twice.
-- `docs/` the thesis and the guide for moving off AuditBoard.
-
-Built by Enterprise DNA. Installed and run for you as part of Omni: https://enterprisedna.co/omni/instead-of/auditboard
+/customise: Back up, add the next migration, update queries and tests, test on disposable data, then apply within the authorised change.
+/new-view: Add a read-only query to views.json, render it, inspect escaping and confidential data. No server or action buttons.

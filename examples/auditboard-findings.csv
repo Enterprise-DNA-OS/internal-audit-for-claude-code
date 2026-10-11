@@ -1,0 +1,3 @@
+Finding ID,Finding Title,Severity,Condition,Root Cause,Recommendation,Status
+AB-17,Contract approval gap,High,"Two contracts, no signed approval",Missing review step,Record approval before signing,Closed
+AB-18,Register completeness,Medium,Three suppliers absent,Incomplete handover,Reconcile supplier register,Open

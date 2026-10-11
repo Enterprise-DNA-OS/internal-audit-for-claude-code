@@ -1,11 +1,44 @@
 [
   {
-    "name": "example",
-    "title": "TODO(author): the first document this industry must produce",
-    "for_each": "select gen_random_uuid() as id, 'Example' as name",
+    "name": "engagement-report",
+    "title": "Engagement report draft",
+    "for_each": "select id,name from engagements order by name",
     "file": "name",
     "sections": [
-      { "title": "Details", "sql": "select 'replace me' as item, $1::text as record_id" }
+      {
+        "title": "Scope and conclusion",
+        "sql": "select name,entity,owner,objective,scope,status,conclusion,approved_by,approved_at from engagements where id=$1"
+      },
+      {
+        "title": "Testing evidence",
+        "sql": "select name,criteria,procedure,preparer,result,evidence,conclusion,reviewer,reviewed_at from workpapers where engagement_id=$1 order by name"
+      },
+      {
+        "title": "Findings",
+        "sql": "select name,severity,condition,cause,recommendation from findings where engagement_id=$1 order by name"
+      },
+      {
+        "title": "Management action plans",
+        "sql": "select a.name,a.owner,a.due,a.state,a.implementation_evidence,a.verification_evidence,a.verified_by from actions a join findings f on f.id=a.finding_id where f.engagement_id=$1 order by a.due,a.name",
+        "note": "Private draft. Review completeness, recipients and approval before issuing. Nothing is sent."
+      }
+    ]
+  },
+  {
+    "name": "action-letter",
+    "title": "Management action follow-up draft",
+    "for_each": "select id,name from findings order by name",
+    "file": "name",
+    "sections": [
+      {
+        "title": "Finding",
+        "sql": "select name,severity,condition,recommendation from findings where id=$1"
+      },
+      {
+        "title": "Agreed actions and verification",
+        "sql": "select name,owner,due,state,delay_reason,implementation_evidence,verification_evidence,verified_by from actions where finding_id=$1 order by due,name",
+        "note": "Do not treat a management implementation claim as independent verification. Draft only."
+      }
     ]
   }
 ]

@@ -1,13 +1,35 @@
 [
   {
     "name": "week",
-    "title": "This week",
-    "subtitle": "Internal Audit for Claude Code: what needs attention, rendered by npm run view",
+    "title": "Internal audit week",
+    "subtitle": "Private read-only report",
     "sections": [
       {
-        "title": "Needs attention",
-        "note": "TODO(author): point this at the industry's attention view (overdue, stuck, quiet).",
-        "sql": "select 'replace me' as item, 'TODO(author)' as why"
+        "title": "Risk-ranked audit plan",
+        "sql": "select name,owner,risk,due,status,awaiting_review,outstanding_requests,open_actions from audit_plan order by risk desc,name"
+      },
+      {
+        "title": "Evidence to chase",
+        "sql": "select engagement,name,owner,due,days_overdue from evidence_chase order by days_overdue desc,name"
+      },
+      {
+        "title": "Action follow-up",
+        "sql": "select engagement,name,owner,severity,due,state,days_overdue from action_follow_up order by days_overdue desc,name"
+      }
+    ]
+  },
+  {
+    "name": "review",
+    "title": "Workpaper and documentation review",
+    "sections": [
+      {
+        "title": "Independent review queue",
+        "sql": "select engagement,name,preparer,result,gap from review_queue order by due,name"
+      },
+      {
+        "title": "Documentation flags",
+        "sql": "select rule,record,gap from compliance_gaps order by rule,record",
+        "note": "Scoped record checks only. See docs/compliance.md for sources and limits."
       }
     ]
   }
